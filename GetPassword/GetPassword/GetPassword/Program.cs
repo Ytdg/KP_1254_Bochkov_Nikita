@@ -48,7 +48,8 @@ namespace GetPassword
             {
                 int[] indxnumbers = new int[lenpassword];
                 int[] indxletters = new int[lenpassword];
-                int[] randinletters = new int[Convert.ToInt32(mincountletter)];
+                int[] randinletters = new int[Convert.ToInt32(mincountletter)]; /* массив содержащий рандомный индекс */
+                /* Заполняем массивы индексами пароля если был ввод чисел или букв */
                 if ((mincountnumber != null & mincountnumber != 0) | (mincountletter != null & mincountletter != 0))
                 {
 
@@ -57,6 +58,7 @@ namespace GetPassword
                         indxnumbers[i] = i;
                         indxletters[i] = i;
                     }
+                    /* заполнение массива рандомными индексами */
                     if (mincountletter != null & mincountletter != 0 & (mincountnumber == null | mincountnumber == 0))
                     {
                         int endinxlettes = indxletters.Length;
@@ -70,6 +72,7 @@ namespace GetPassword
 
                         }
                         var z = 1;
+                        /* сортировка массива с рандомными индексами */
                         while (z == 1)
                         {
                             z = 0;
@@ -88,7 +91,7 @@ namespace GetPassword
 
                 }
 
-
+                /* Генерация пароля с  соответсвующими дефол значениями */
                 while (password.Length < lenpassword)
                 {
                     var randsymbo = random.Next(0, 4);
@@ -115,6 +118,7 @@ namespace GetPassword
 
 
                     }
+                    /* Для того чтобы выйти из цикла ,если нет спец символов и введены буквы и цифры */
                     if (chekspecsymbol == false & mincountletter != null & mincountletter != 0 & mincountnumber != null & mincountnumber != 0)
                     {
 
@@ -125,7 +129,7 @@ namespace GetPassword
 
                 }
 
-
+                /* Для создание пароля при отсутвии символов в 1 комите . В дальнейшем происходит замена соответсвующих символов */
                 if (chekspecsymbol == false & mincountnumber != 0 & mincountnumber != null & mincountletter != null & mincountletter != 0)
                 {
                     for (int i = 0; i < lenpassword; i++)
@@ -164,7 +168,7 @@ namespace GetPassword
 
                     if (mincountletter != null & mincountletter != 0)
                     {
-                        int[] indlet = new int[lenpassword - Convert.ToInt32(mincountnumber)];
+                        int[] indlet = new int[lenpassword - Convert.ToInt32(mincountnumber)]; /* содержит количество индексов возможных букв */
 
                         var c = 0;
                         for (int i = 0; i < confpassword.Length; i++)
@@ -178,7 +182,7 @@ namespace GetPassword
                         }
 
                         int n = indlet.Length;
-                        int countlettes = 0;
+                        int countlettes = 0; /* замена */
                         while (countlettes < mincountletter)
                         {
                             int a = random.Next(0, n);
@@ -219,7 +223,7 @@ namespace GetPassword
                     }
 
 
-                }
+                } /* Когда цифры = дефолт */
                 else
                 {
                     for (int i = 0; i < randinletters.Length; i++)
@@ -285,6 +289,7 @@ namespace GetPassword
             int help3 = 0;
             int help4 = 0;
             int help5 = 0;
+            /* Обработка параметров */
            foreach(string value in args)
             {
                
@@ -329,16 +334,17 @@ namespace GetPassword
                 }
                 
             }
+            /* Проверка корректности параметров: кол -во параметров = кол-ву правильных параметров  */
             if (help + help1 + help2+help3+help4+help5 == args.Length)
             {
-
+                 /* Проверка на отсутвие нехватки символов */
                 if (help == 1 & help1 == 1 & help2 == 1 & Convert.ToInt32(countletter) + Convert.ToInt32(countnumber) < lenpassword & chekspecsymbol == false)
                 {
 
                     Console.WriteLine("Неверные параметры");
                 }
                 else
-                {
+                {   /* Если длина пароля не указана */
                     if (help == 0 & (help1 == 1 | help2 == 1))
                     {
 
