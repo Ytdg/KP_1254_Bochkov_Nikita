@@ -10,15 +10,15 @@ namespace Tests
 {
     internal class TestResult
     {
-        public string NameUser;
-        public string LastUser;
-        public int YearsUser;
-        public string GroupUser;
-        public string Answer1;
-        public List<string> Answer2 = new List<string>();
-        public string Answer3;
-        public decimal Answer4;
-        public string Answer5;
+        public string NameUser {get;set}
+        public string LastUser {get;set}
+        public int YearsUser {get;set}
+        public string GroupUser {get;set}
+        public string Answer1 {get;set}
+        public List<string> Answer2 {get;set} = new List<string>()
+        public string Answer3 {get;set}
+        public decimal Answer4 {get;set}
+        public string Answer5 {get;set}
 
 
         public void Serialize()
