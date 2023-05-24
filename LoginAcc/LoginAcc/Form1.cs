@@ -15,8 +15,8 @@ namespace LoginAcc
     public partial class Form1 : Form
     {
         public List<Account> users { get; set; }
-        public Account thisUser { get; set; } = new Account();   
-        Dictionary<string,string>translate= new Dictionary<string, string>() {
+        public Account thisUser { get; set; } = new Account();
+        Dictionary<string, string> translate = new Dictionary<string, string>() {
                 {"а","a"},
                 {"б","b"},
                 {"в","v"},
@@ -50,33 +50,33 @@ namespace LoginAcc
                 {"э","e"},
                 {"ю","yu"},
                 {"я","ya"},
-                
+
 
 
 
 
 
         };
-        Process procces= new Process();
-        
-        
-        
+        Process procces = new Process();
+
+
+
 
         public Form1()
         {
             InitializeComponent();
             CreateProcc();
-          
-            
+
+
         }
 
-      
-        
-        
+
+
+
         private void CreateProcc()
         {
-            
-            
+
+
 
             procces.StartInfo = new ProcessStartInfo()
             {
@@ -91,22 +91,27 @@ namespace LoginAcc
 
 
             };
-            
-         
+
+
         }
-       
-        
-       
+
+
+
         private void saveIn_Click(object sender, EventArgs e)
         {
-            if (ValidAnswer())
-            {  int index=AllUSers.SelectedIndex;
-               if(index != -1) { Account user = AllUSers.Items[index] as Account;
+            if (ValidAnswer(false))
+            {
+                int index = AllUSers.SelectedIndex;
+                if (index != -1)
+                {
+                    Account user = AllUSers.Items[index] as Account;
                     user.name = NameU.Text;
                     user.lastName = LastNameU.Text;
-                    user.password = PasswordU.Text; 
+                    user.password = PasswordU.Text;
                     user.login = LoginU.Text;
-                    AllUSers.Items[index]=user;
+                    if (rbntypeAdmin.Checked) { user.permissions=Account.Permissions.Admin; rbntypeAdmin.Checked = true; }
+                    else { user.permissions=Account.Permissions.CommonUser;rbntypeUser.Checked = true; }
+                    AllUSers.Items[index] = user;
                 }
                 AllUSers.Update();
             }
@@ -121,18 +126,23 @@ namespace LoginAcc
         {
             int index = AllUSers.SelectedIndex;
             if (index != -1)
-            {   Account user = AllUSers.Items[index] as Account;
+            {
+                Account user = AllUSers.Items[index] as Account;
                 NameU.Text = user.name;
                 LastNameU.Text = user.lastName;
                 LoginU.Text = user.login;
                 PasswordU.Text = user.password;
-               
+                if (user.permissions == Account.Permissions.CommonUser)
+                {
+                    rbntypeUser.Checked = true;
+                }
+                else { rbntypeAdmin.Checked = true; }
                 if (thisUser.permissions == Account.Permissions.CommonUser)
                 {
                     if (thisUser.login == user.login) { CapabilitiesCommonUser(true); }
                     else { CapabilitiesCommonUser(false); }
                 }
-                
+
             }
         }
 
@@ -150,68 +160,77 @@ namespace LoginAcc
                 }
                 LoginU.Text = res_string;
             }
-            catch { LoginU.Text = "#error";LoginU.Enabled = false; }
-            
-            
-        }
-        private bool ValidAnswer()
-        {
+            catch { LoginU.Text = "#error"; LoginU.Enabled = false; }
 
-            foreach (Control item in firstGroup.Controls)
-            {
-                if (item is TextBox)
+
+        }
+        private bool ValidAnswer(bool chekoperation)
+        {
+       
+            
+                foreach (Control item in firstGroup.Controls)
                 {
-                    if (item.Text.Replace(" ", "") == "")
+                    if (item is TextBox)
                     {
+                        if (item.Text.Replace(" ", "") == "")
+                        {
+                            return false;
+                        }
+                        if (item.Name == "LoginU")
+                        {
+                            foreach (char g in item.Text)
+                            {
+                                int chek = (int)g;
+                                if ((chek < 65 | (chek > 90 & chek < 97) | chek > 122) & g != '-' & g != '_' & g != '@')
+                                {
+
+                                    return false;
+                                }
+                            }
+
+                        }
+                    }
+                }
+               
+            
+           
+                if (rbntypeAdmin.Checked == false & rbntypeUser.Checked == false) { return false; }
+            if (chekoperation)
+            {
+                foreach (Account s in users)
+                {
+                    if (LoginU.Text == s.login)
+                    {
+
                         return false;
                     }
-                    if (item.Name == "LoginU")
-                    {
-                        foreach (char g in item.Text)
-                        { int chek = (int)g;
-                            if ((chek < 65 | (chek > 90 & chek < 97) | chek > 122) & g != '-' & g != '_' & g != '@')
-                            {
-
-                                return false;
-                            }
-                        }
-
-                    }
                 }
             }
-            if (rbntypeAdmin.Checked == false&rbntypeUser.Checked==false) { return false; }
-            foreach(Account s in users)
-            {
-                if (LoginU.Text == s.login)
-                {
-               
-                    return false;
-                }
-            }
-            return true;
+                return true;
+            
         }
-        
+
         private void GenPass_Click(object sender, EventArgs e)
         {
-            
+
             string parametrs_password = "";
-            if (LenPasP.Text.Replace(" ","") != "")
+            if (LenPasP.Text.Replace(" ", "") != "")
             {
-                parametrs_password=parametrs_password+LenPasP.Text+" ";
+                parametrs_password = parametrs_password + LenPasP.Text + " ";
             }
-            if(CountNumberP.Text.Replace(" ", "") != "")
+            if (CountNumberP.Text.Replace(" ", "") != "")
             {
-                parametrs_password=parametrs_password+ lbDigitsP.Text + CountNumberP.Text+" ";
+                parametrs_password = parametrs_password + lbDigitsP.Text + CountNumberP.Text + " ";
             }
-            if(CountLettersP.Text.Replace(" ", "") != "")
+            if (CountLettersP.Text.Replace(" ", "") != "")
             {
-                parametrs_password=parametrs_password+lbLettersP.Text + CountLettersP.Text+" ";
+                parametrs_password = parametrs_password + lbLettersP.Text + CountLettersP.Text + " ";
             }
             if (CheckUpperCaseP.Checked)
             {
                 parametrs_password = parametrs_password + "-u ";
             }
-            if(CheckSpecialP.Checked)
+            if (CheckSpecialP.Checked)
             {
                 parametrs_password = parametrs_password + "-s ";
             }
@@ -233,38 +252,41 @@ namespace LoginAcc
 
         private void Form1_Load(object sender, EventArgs e)
         {
-                AllUSers.DisplayMember = "name";
-                ChekUser();
+            AllUSers.DisplayMember = "name";
+            saveIn.Enabled = true;
+          
 
-            
+
             foreach (Account item in users)
-                {
+            {
                 switch (thisUser.permissions)
                 {
                     case Account.Permissions.Guest:
-                        if(item.permissions==Account.Permissions.CommonUser) {AllUSers.Items.Add(item);
-                         
+                        if (item.permissions == Account.Permissions.CommonUser)
+                        {
+                            AllUSers.Items.Add(item);
+
                         }
                         break;
                     case Account.Permissions.Admin:
                         AllUSers.Items.Add(item);
-                           
+
                         break;
                     case Account.Permissions.CommonUser:
-                        AllUSers.Items.Add(item);  break;
+                        AllUSers.Items.Add(item); break;
                 }
-               
-                }
+
+            }
             if (thisUser.permissions == Account.Permissions.Guest) { CapabilitiesGuest(); }
-            if (thisUser.permissions == Account.Permissions.CommonUser) { CapabilitiesCommonUser(false);label5.Text = thisUser.name; }
-         
-           
-            
-                
+            if (thisUser.permissions == Account.Permissions.CommonUser) { CapabilitiesCommonUser(false); label5.Text = thisUser.name; }
+
+
+
+
         }
         private void CapabilitiesGuest()
         {
-            foreach(Control item in this.Controls)
+            foreach (Control item in this.Controls)
             {
                 if (item.GetType() != AllUSers.GetType())
                 {
@@ -277,53 +299,41 @@ namespace LoginAcc
         }
         private void CapabilitiesCommonUser(bool chekerData)
         {
-           
+
             if (chekerData)
             {
                 foreach (Control item in this.Controls)
                 {
-                  
+
                     item.Enabled = true;
                 }
+                
                 PasswordU.Visible = true;
                 LoginU.Enabled = true;
             }
             else
             {
-                
+
                 foreach (Control item in this.Controls)
                 {
-                    if (item.Name!= "AllUSers"&item.Name!= "groupbox1") {
-                        item.Enabled = false; }
+                    if (item.Name != "AllUSers" & item.Name != "groupbox1")
+                    {
+                        item.Enabled = false;
+                    }
                 }
                 PasswordU.Visible = false;
             }
             btnRemoveUser.Enabled = false;
             button1.Enabled = false;
+            rbntypeAdmin.Enabled = false;
+            rbntypeUser.Enabled = false;
         }
 
-        private void rbntypeAdmin_CheckedChanged(object sender, EventArgs e)
-        {
-            AllUSers.Items.Clear();
-          
-            foreach(Account user in users)
-            {
-                if (user.permissions == Account.Permissions.Admin) { AllUSers.Items.Add(user); }
-            }
-        }
 
-        private void rbntypeUser_CheckedChanged(object sender, EventArgs e)
-        {
-            AllUSers.Items.Clear();
-            foreach (Account user in users)
-            {
-                if (user.permissions == Account.Permissions.CommonUser) { AllUSers.Items.Add(user); }
-            }
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (ValidAnswer()&(rbntypeAdmin.Checked|rbntypeUser.Checked))
+            if (ValidAnswer(true) & (rbntypeAdmin.Checked | rbntypeUser.Checked))
             {
                 Account user = new Account()
                 {
@@ -334,35 +344,25 @@ namespace LoginAcc
                     permissions = rbntypeAdmin.Checked ? Account.Permissions.Admin : Account.Permissions.CommonUser
                 };
                 AllUSers.Items.Add(user);
-                AllUSers.SelectedIndex=AllUSers.Items.Count-1;
+                AllUSers.SelectedIndex = AllUSers.Items.Count - 1;
                 users.Add(user);
-                
+
             }
             else { MessageBox.Show("Неккоректные параметры или такой Login уже существует"); }
-           
+
         }
 
         private void btnRemoveUser_Click(object sender, EventArgs e)
         {
             int index = AllUSers.SelectedIndex;
-            if (index != -1) {
+            if (index != -1)
+            {
                 Account user = AllUSers.Items[index] as Account;
-                if (user != null&&user.login!=thisUser.login) {users.Remove(user); AllUSers.Items.RemoveAt(index); }
-                
-             
+                if (user != null && user.login != thisUser.login) { users.Remove(user); AllUSers.Items.RemoveAt(index); }
+
+
             }
             else { MessageBox.Show("Выберете usera"); }
-        }
-        async private void ChekUser()
-        {
-
-            await Task.Run(() =>
-            {
-                while (true) {
-                if(AllUSers.SelectedIndex !=-1) { saveIn.Enabled = true; }
-                    else { saveIn.Enabled = false; }
-                }
-            });
         }
     }
 }

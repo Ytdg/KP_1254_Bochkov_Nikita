@@ -362,7 +362,6 @@
             this.rbntypeUser.TabIndex = 1;
             this.rbntypeUser.Text = "Regular user";
             this.rbntypeUser.UseVisualStyleBackColor = true;
-            this.rbntypeUser.CheckedChanged += new System.EventHandler(this.rbntypeUser_CheckedChanged);
             // 
             // rbntypeAdmin
             // 
@@ -373,7 +372,6 @@
             this.rbntypeAdmin.TabIndex = 0;
             this.rbntypeAdmin.Text = "Admin";
             this.rbntypeAdmin.UseVisualStyleBackColor = true;
-            this.rbntypeAdmin.CheckedChanged += new System.EventHandler(this.rbntypeAdmin_CheckedChanged);
             // 
             // btnRemoveUser
             // 
