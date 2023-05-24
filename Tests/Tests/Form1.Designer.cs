@@ -573,7 +573,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(926, 483);
+            this.ClientSize = new System.Drawing.Size(947, 483);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.ItemResulUsers);
             this.Controls.Add(this.label13);
@@ -599,6 +599,7 @@
             this.Controls.Add(this.groupBox2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.YearsUser)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

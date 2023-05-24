@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Channels;
@@ -15,19 +16,19 @@ namespace Tests
     public partial class Form1 : Form
     {
         List<TestResult> results = new List<TestResult>();
-        List<string> dinamicanswer= new List<string>(); /* ДИНИМАЧИЕСКИЕ ОТВЕТЫ*/
-        TestResult All_Users = new TestResult(); 
-        Random randanswer= new Random();
-        
+        List<string> dinamicanswer = new List<string>(); /* ДИНИМАЧИЕСКИЕ ОТВЕТЫ*/
+        TestResult All_Users = new TestResult();
+        Random randanswer = new Random();
 
-      
+
+
 
         public Form1()
         {
             InitializeComponent();
             InitComponent();
-            
-          
+
+
         }
         public void InitComponent()
         {
@@ -37,13 +38,13 @@ namespace Tests
 
 
         }
-        
-   
+
+
         private void NewUser()
         {
 
-            results.Add(new TestResult());
-           
+            results.Add(new TestResult(){serializeDel=Serialize});
+
 
         }
         private void ClearAnswerLocal()
@@ -58,28 +59,29 @@ namespace Tests
         }
 
 
-        
+
         private bool cheksavebuttom = false;
 
 
         private void SaveAnswer_Click(object sender, EventArgs e)
         {
-            
-            
+
+
             cheksavebuttom = true;
             AnswerUser();
             ItemClear();
-           
-         
 
-            
+
+
+
 
 
         }
-        bool chekloadresult= false;
+        bool chekloadresult = false;
         private void SaveInFile_Click(object sender, EventArgs e)
-        {   int c = 0;
-            if (ValidAnswer() &chekloadresult==false )
+        {
+            int c = 0;
+            if (ValidAnswer() & chekloadresult == false)
             {
                 cheksavebuttom = false;
                 SaveResultFile();
@@ -101,28 +103,29 @@ namespace Tests
             }
 
         }
-        
+
 
 
 
         private bool ValidAnswer()
         {
-          foreach (string answer in dinamicanswer) { 
+            foreach (string answer in dinamicanswer)
+            {
 
-                if(answer.Trim()=="" | dinamicanswer[2].Trim() == "0")
+                if (answer.Trim() == "" | dinamicanswer[2].Trim() == "0")
                 {
 
                     return false;
                 }
-                          
+
             }
-          return true;
-           
+            return true;
+
         }
 
 
 
-        
+
         private int AnswerUser()
         {
 
@@ -178,7 +181,7 @@ namespace Tests
                 }
 
             }
-            
+
         }
 
         private void ItemClear()
@@ -193,21 +196,21 @@ namespace Tests
         }
         private void SaveResultFile()
         {
-            
-                results[results.Count - 1].NameUser = dinamicanswer[0].Replace(" ","");
-                results[results.Count - 1].LastUser = dinamicanswer[1].Replace(" ","");
-                results[results.Count - 1].YearsUser = Convert.ToInt32(dinamicanswer[2].Replace(" ",""));
-            results[results.Count - 1].GroupUser = dinamicanswer[3].Replace(" ", "") ;
-                results[results.Count - 1].Answer1 = dinamicanswer[4];
-                results[results.Count - 1].Answer2 = dinamicanswer[5].Split(' ').ToList();
-                results[results.Count - 1].Answer3 = dinamicanswer[6].Replace(" ", "");
-                results[results.Count - 1].Answer4 = Convert.ToInt32(dinamicanswer[7].Replace(" ", ""));
-                results[results.Count - 1].Answer5 = dinamicanswer[8];
-                results[results.Count - 1].Serialize();
-            
-            
 
-            
+            results[results.Count - 1].NameUser = dinamicanswer[0].Replace(" ", "");
+            results[results.Count - 1].LastUser = dinamicanswer[1].Replace(" ", "");
+            results[results.Count - 1].YearsUser = Convert.ToInt32(dinamicanswer[2].Replace(" ", ""));
+            results[results.Count - 1].GroupUser = dinamicanswer[3].Replace(" ", "");
+            results[results.Count - 1].Answer1 = dinamicanswer[4];
+            results[results.Count - 1].Answer2 = dinamicanswer[5].Split(' ').ToList();
+            results[results.Count - 1].Answer3 = dinamicanswer[6].Replace(" ", "");
+            results[results.Count - 1].Answer4 = Convert.ToInt32(dinamicanswer[7].Replace(" ", ""));
+            results[results.Count - 1].Answer5 = dinamicanswer[8];
+            results[results.Count - 1].Serialize();
+
+
+
+
 
         }
         private void ClearAnswer_Click(object sender, EventArgs e)
@@ -220,11 +223,11 @@ namespace Tests
             {
                 ClearForm();
             }
-                
-            
+
+
         }
 
-        private void ControlValueDefoltorRand(bool randresult=false,bool noloadresult=true, int index_chek_result_users=0)
+        private void ControlValueDefoltorRand(bool randresult = false, bool noloadresult = true, int index_chek_result_users = 0)
         {
             if (noloadresult)
             {
@@ -279,57 +282,60 @@ namespace Tests
         {
             int c = 1;
             int k = 0;
-            
+
             foreach (Control item in groupBox1.Controls)
             {
                 if (item.GetType() == typeof(Panel))
                 {
                     c = 1;
                     int randindexrb = randanswer.Next(1, 4);
-                   
+
                     foreach (Control its_item in item.Controls)
                     {
                         RadioButton one = its_item as RadioButton;
                         CheckBox two = its_item as CheckBox;
-                        if (one != null & c==randindexrb)
+                        if (one != null & c == randindexrb)
                         {
                             one.Checked = true;
                         }
 
-                        if (two != null )
-                        {   
-                            two.Checked = Convert.ToBoolean(randanswer.Next(0,2));
-                            k=two.Checked==true?k+ 1 :k;
-                           
+                        if (two != null)
+                        {
+                            two.Checked = Convert.ToBoolean(randanswer.Next(0, 2));
+                            k = two.Checked == true ? k + 1 : k;
+
                         }
                         c++;
 
                     }
                 }
-                var  ff = string.Join(",",dinamicanswer);
+                var ff = string.Join(",", dinamicanswer);
             }
-            checkBox1.Checked = k==0?true:checkBox1.Checked;
-            ControlValueDefoltorRand(randresult:true);
+            checkBox1.Checked = k == 0 ? true : checkBox1.Checked;
+            ControlValueDefoltorRand(randresult: true);
         }
-        bool chek_all_users=false;
+        bool chek_all_users = false;
+        bool chek_oplad_result;
         private void LoadFromFile_Click(object sender, EventArgs e)
         {
             int c = 0;
-            
-            if (All_Users.Deserialize(results,label12))
+            Deserialize();
+            if (chek_oplad_result)
             {
-                
+
                 ItemResulUsers.Items.Clear();
-                for (int i = 0; i < results.Count; i++)
+                foreach (var item in results)
                 {
-                    ItemResulUsers.Items.Add("Users" + i);
+                    ItemResulUsers.Items.Add(item.NameUser);
                     c++;
                 }
                 chek_all_users = c != 0 ? true : false;
+                chek_oplad_result = false;
 
             }
-            
+
         }
+
 
 
 
@@ -340,14 +346,17 @@ namespace Tests
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-          
+
         }
 
         private void ItemResulUsers_SelectedIndexChanged(object sender, EventArgs e)
-        { if (chek_all_users) {
+        {
+            if (chek_all_users)
+            {
                 int index_chek_result_users = ItemResulUsers.SelectedIndex;
                 label12.Text = results[0].Answer1;
-                if (index_chek_result_users != -1) {
+                if (index_chek_result_users != -1)
+                {
                     foreach (Control item in groupBox1.Controls)
                     {
                         if (item.GetType() == typeof(Panel))
@@ -356,9 +365,9 @@ namespace Tests
                             {
                                 RadioButton one = its_item as RadioButton;
                                 CheckBox two = its_item as CheckBox;
-                                if (one != null )
+                                if (one != null)
                                 {
-                                    one.Checked = results[index_chek_result_users].Answer1 == one.Text?true:false;
+                                    one.Checked = results[index_chek_result_users].Answer1 == one.Text ? true : false;
                                 }
                                 if (two != null)
                                 {
@@ -367,11 +376,11 @@ namespace Tests
                                     {
                                         if (two.Text == items)
                                         {
-                                          
+
                                             c = c + 1;
                                         }
                                     }
-                                    two.Checked = c==0?false:true;
+                                    two.Checked = c == 0 ? false : true;
 
                                 }
 
@@ -393,13 +402,82 @@ namespace Tests
 
                 MessageBox.Show("Вы не загрузили результаты либо они отсутвуют");
             }
-        
+
 
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+        public void Deserialize()
+        {
+
+            if (File.Exists(Directory.GetCurrentDirectory() + "/opros.json"))
+            {
+                var user = System.IO.File.ReadAllLines("opros.json");
+                if (user.Length != 0)
+                {
+                    results.Clear();
+                    foreach (var answer in user)
+                    {
+                        string format = answer.Replace("\"HowSaveNature\"", "*");
+                        string[] result = format.Replace((char)34 + ":" + " " + (char)34, " ").Replace((char)34 + "," + (char)34, " ").Replace("," + (char)34, " ").Replace("," + "*", " ").Split(' ');
+                        string answerOpen = format.Substring(format.IndexOf("*"), format.LastIndexOf("}") - format.IndexOf("*"));
+                        answerOpen = answerOpen.Substring(answerOpen.IndexOf(Convert.ToString((char)34)) + 1, answerOpen.LastIndexOf(Convert.ToString((char)34)) - answerOpen.IndexOf(Convert.ToString((char)34)) - 1);
+                        NewUser();
+                        results[results.Count - 1].NameUser = result[1];
+                        results[results.Count - 1].LastUser = result[3];
+
+                        results[results.Count - 1].YearsUser = Convert.ToInt32(result[5]);
+                        results[results.Count - 1].GroupUser = result[7];
+                        results[results.Count - 1].Answer1 = result[9];
+                        foreach (var item in result[11].Replace("[", "").Replace("]", "").Replace(",", " ").Split(' '))
+                        {
+                            results[results.Count - 1].Answer2.Add(item);
+
+                        }
+                        results[results.Count - 1].Answer3 = result[13];
+                        results[results.Count - 1].Answer4 = Convert.ToInt32(result[15]);
+                        results[results.Count - 1].Answer5 = answerOpen;
+
+                    }
+
+
+
+                    chek_oplad_result = true;
+                }
+                else
+                {
+                    MessageBox.Show("Файл пустой");
+                    chek_oplad_result=false;
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Файл не найден");
+                chek_oplad_result = false;
+            }
+        }
+        public void Serialize(object obj)
+        {
+            TestResult user = (TestResult)obj;    
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "opros.json");
+
+            string creat_text = "[{" + "\"NameUser\"" + ": " + $"\"{user.NameUser}\"" + "," + "\"LastName\"" + ": " + $"\"{user.LastUser}\"" + "," + "\"Age\"" + ": " + user.YearsUser + "," + "\"GroupNumber\"" + ": " + $"\"{user.GroupUser}\"" + "," + "\"LoveNature\"" + ": " + $"\"{user.Answer1}\"" + "," + "\"LikeAnimals\"" + ": " + $"\"[{string.Join(",", user.Answer2).TrimEnd(',')}]\"" + "," + "\"AboutEcologi\"" + ": " + $"\"{user.Answer3}\"" + "," + "\"CountMyAnimals\"" + ": " + $"{user.Answer4}" + "," + "\"HowSaveNature\"" + ": " + $"\"{user.Answer5}\"" + "}]";
+            using (StreamWriter sw = File.AppendText(path))
+            {
+                sw.WriteLine(creat_text);
+                sw.Close();
+            }
+
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           
         }
     }
 }
